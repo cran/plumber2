@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Annotations reference</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+width: 0.8em;
+margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+}
+pre.numberSource { margin-left: 3em; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+
+
+<style type="text/css">body {background-color: #fff;margin: 1em auto;max-width: 700px;overflow: visible;padding-left: 2em;padding-right: 2em;font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;font-size: 14px;line-height: 1.35;}table {margin: 1em auto;border-width: 1px;border-color: #DDDDDD;border-style: outset;border-collapse: collapse;}table th {border-width: 2px;padding: 5px;border-style: inset;}table td {border-width: 1px;border-style: inset;line-height: 18px;padding: 5px 5px;}table, table th, table td {border-left-style: none;border-right-style: none;}table thead, table tr.even {background-color: #f7f7f7;}p {margin: 0.5em 0;}blockquote {background-color: #f6f6f6;padding: 0.25em 0.75em;}hr {border-style: solid;border: none;border-top: 1px solid #777;margin: 28px 0;}dl {margin-left: 0;}dl dd {margin-bottom: 13px;margin-left: 13px;}dl dt {font-weight: bold;}ul {margin-top: 0;}ul li {list-style: circle outside;}ul ul {margin-bottom: 0;}pre, code {background-color: #f7f7f7;border-radius: 3px;color: #333;white-space: pre-wrap; }pre {border-radius: 3px;margin: 5px 0px 10px 0px;padding: 10px;}pre:not([class]) {background-color: #f7f7f7;}code {font-family: Consolas, Monaco, 'Courier New', monospace;font-size: 85%;}p > code, li > code {padding: 2px 0px;}div.figure {text-align: center;}img {background-color: #FFFFFF;padding: 2px;border: 1px solid #DDDDDD;border-radius: 3px;border: 1px solid #CCCCCC;margin: 0 5px;}h1 {margin-top: 0;font-size: 35px;line-height: 40px;}h2 {border-bottom: 4px solid #f7f7f7;padding-top: 10px;padding-bottom: 2px;font-size: 145%;}h3 {border-bottom: 2px solid #f7f7f7;padding-top: 10px;font-size: 120%;}h4 {border-bottom: 1px solid #f7f7f7;margin-left: 8px;font-size: 105%;}h5, h6 {border-bottom: 1px solid #ccc;font-size: 105%;}a {color: #0033dd;text-decoration: none;}a:hover {color: #6666ff; }a:visited {color: #800080; }a:visited:hover {color: #BB00BB; }a[href^="http:"] {text-decoration: underline; }a[href^="https:"] {text-decoration: underline; }</style>
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Annotations reference</h1>
+
+</header>
+
+
+<h2 id="annotations">Annotations</h2>
+<p>Annotations are specially-structured comments used in your plumber file to create an API. A full annotation line starts with <code>#*</code>, then the annotation keyword <code>@...</code>, any number of space characters followed by the content. If you wish to use the annotation to document your API file but don’t want any OpenAPI documentation to be generated you can use <code>@noDoc</code> tag which works much like roxygens <code>@noRd</code>.</p>
+<h2 id="annotation-settings">Annotation settings</h2>
+<p>A few annotations modify how the file is parsed and interpreted. These must all appear in the first block of the file (in the case of <code>@roxygenPrefix</code> the first line).</p>
+<h3 id="use-roxygen-prefix">Use roxygen prefix</h3>
+<p>By default, plumber2 uses the <code>#*</code> prefix for its blocks to avoid clashing with roxygen comments. plumber (the old one) allowed either and while it is recommended to differentiate between roxygen and plumber2 annotations you can opt in to also understanding roxygen prefix.</p>
+<blockquote>
+<p>This tag <strong>must</strong> appear on the first line of the file to have an effect.</p>
+</blockquote>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Annotation</th>
+<th>Argument</th>
+<th>Description/References</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>@roxygenPrefix</code></td>
+<td>None</td>
+<td>Turns on roxygen prefix for the file</td>
+</tr>
+</tbody>
+</table>
+<p>If you wish to always allow roxygen prefixes you can set the <code>plumber2.roxygenPrefix</code> option to <code>TRUE</code></p>
+<h5 id="annotations-example">Annotations example</h5>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @roxygenPrefix</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cn">NULL</span></span></code></pre></div>
+<h5 id="equivalent-programmatic-usage">Equivalent programmatic usage</h5>
+<p>There is no direct equivalent in programmatic usage as this pertains to the parsing of the plumber file.</p>
+<h3 id="specifying-route-name">Specifying route name</h3>
+<p>By default, the name of the file (without extension) is used as the name for the route any handlers etc are attached to. However, you can change this by having a first block in your file with a <code>@routeName</code> tag specifying the name to use for all route specific blocks in the file. This also makes it possible to split out the specification of a single route among multiple files if it begins to grow unwieldy</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 46%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Annotation</th>
+<th>Argument</th>
+<th>Description/References</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>@routeName</code></td>
+<td><code>name</code></td>
+<td>Sets the name of the route to use for all blocks in the file</td>
+</tr>
+</tbody>
+</table>
+<h5 id="annotations-example-1">Annotations example</h5>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @routeName main_route</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cn">NULL</span></span></code></pre></div>
+<h5 id="equivalent-programmatic-usage-1">Equivalent programmatic usage</h5>
+<p>There is no direct equivalent in programmatic usage as this pertains to the parsing of the plumber file. Any relevant function has a <code>route</code> argument where you can specify which route to add the given functionality to.</p>
+<h3 id="specifying-route-order">Specifying route order</h3>
+<p>Route files are processed in alphanumerical order which influence the order in which their route is attached. You can modify the route order (but not the file processing order) using the <code>@routeOrder</code> tag. If multiple files have the same <code>@routeName</code> then the lowest <code>@routeOrder</code> value will be used. Any file without a <code>@routeOrder</code> tag will be added after those that do, using the default alphanumeric order.</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 46%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Annotation</th>
+<th>Argument</th>
+<th>Description/References</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>@routeOrder</code></td>
+<td><code>order</code></td>
+<td>Sets the order in which routes are added to the api. Lower values means earlier position</td>
+</tr>
+</tbody>
+</table>
+<h5 id="annotations-example-2">Annotations example</h5>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @routeOrder 3</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cn">NULL</span></span></code></pre></div>
+<h5 id="equivalent-programmatic-usage-2">Equivalent programmatic usage</h5>
+<p>You can programmatically control the location of a route you add with <code>api_add_route()</code> using the <code>after</code> argument.</p>
+<h3 id="specifying-root-url-for-the-whole-file">Specifying root url for the whole file</h3>
+<p>Many annotations somehow references URL paths, either as the endpoint of a handler, or where to serve a shiny app from. You can set a root for the whole file which will be prepended to any relevant URL. In this way it is easy to move all functionality from a single file to a different location if necessary.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Annotation</th>
+<th>Argument</th>
+<th>Description/References</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>@root</code></td>
+<td><code>path</code></td>
+<td>Sets the root of every URL path in the file</td>
+</tr>
+</tbody>
+</table>
+<h5 id="annotations-example-3">Annotations example</h5>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @root /path/to/these/apis</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cn">NULL</span></span></code></pre></div>
+<h5 id="equivalent-programmatic-usage-3">Equivalent programmatic usage</h5>
+<p>You can programmatically set the root of a new route you add with <code>api_add_route()</code> using the <code>root</code> argument.</p>
+<h2 id="global-annotations">Global annotations</h2>
+<p>Global annotations are not related to any handler and should be placed in their own block. The block should be terminated by a <code>&quot;_API&quot;</code> expression. Instead of <code>@title</code> and <code>@description</code> you can also use the convention that the first line gives the title and any proceeding lines until the first tag gives the description.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Annotation</th>
+<th>Argument</th>
+<th>Description/References</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>@title</code></td>
+<td><code>Title</code></td>
+<td><a href="https://spec.openapis.org/oas/v3.0.3#info-object">Info Object</a></td>
+</tr>
+<tr class="even">
+<td><code>@description</code></td>
+<td><code>Description</code></td>
+<td><a href="https://spec.openapis.org/oas/v3.0.3#info-object">Info Object</a></td>
+</tr>
+<tr class="odd">
+<td><code>@tos</code></td>
+<td><code>TOS link</code></td>
+<td><a href="https://spec.openapis.org/oas/v3.0.3#info-object">Info Object</a></td>
+</tr>
+<tr class="even">
+<td><code>@contact</code></td>
+<td><code>Contact object</code></td>
+<td><a href="https://spec.openapis.org/oas/v3.0.3#contact-object">Contact Object</a></td>
+</tr>
+<tr class="odd">
+<td><code>@license</code></td>
+<td><code>License object</code></td>
+<td><a href="https://spec.openapis.org/oas/v3.0.3#license-object">License Object</a></td>
+</tr>
+<tr class="even">
+<td><code>@version</code></td>
+<td><code>Version</code></td>
+<td><a href="https://spec.openapis.org/oas/v3.0.3#info-object">Info Object</a></td>
+</tr>
+<tr class="odd">
+<td><code>@tag</code></td>
+<td><code>Tag</code> <code>Description</code></td>
+<td>Can be repeated to add multiple tags. Quote with ” or ’ to use non word character (like spaces) in <code>Tag</code>. <a href="https://spec.openapis.org/oas/v3.0.3#tag-object">Tag Object</a></td>
+</tr>
+<tr class="even">
+<td><code>@noDoc</code></td>
+<td>None</td>
+<td>Don’t generate OpenAPI documentation from this block</td>
+</tr>
+</tbody>
+</table>
+<h5 id="annotations-example-4">Annotations example</h5>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* Sample Pet Store App</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#*</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#* This is a sample server for a pet store.</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#*</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#* @tos http://example.com/terms/</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#* @contact list(name = &quot;API Support&quot;, url = &quot;http://www.example.com/support&quot;, email = &quot;support@example.com&quot;)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#* @license list(name = &quot;Apache 2.0&quot;, url = &quot;https://www.apache.org/licenses/LICENSE-2.0.html&quot;)</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#* @version 1.0.1</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#* @tag pet Pets operations</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#* @tag toy Toys operations</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#* @tag &quot;toy space&quot; Toys operations</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;_API&quot;</span></span></code></pre></div>
+<h5 id="equivalent-programmatic-usage-4">Equivalent programmatic usage</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">api</span>() <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_doc_add</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">openapi</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">info =</span> <span class="fu">openapi_info</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;Sample Pet Store App&quot;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">description =</span> <span class="st">&quot;This is a sample server for a pet store.&quot;</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">terms_of_service =</span> <span class="st">&quot;http://example.com/terms/&quot;</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">contact =</span> <span class="fu">openapi_contact</span>(<span class="at">name =</span> <span class="st">&quot;API Support&quot;</span>, <span class="at">url =</span> <span class="st">&quot;http://www.example.com/support&quot;</span>, <span class="at">email =</span> <span class="st">&quot;support@example.com&quot;</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">license =</span> <span class="fu">openapi_license</span>(<span class="at">name =</span> <span class="st">&quot;Apache 2.0&quot;</span>, <span class="at">url =</span> <span class="st">&quot;https://www.apache.org/licenses/LICENSE-2.0.html&quot;</span>),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">version =</span> <span class="st">&quot;1.0.1&quot;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">tags =</span> <span class="fu">list</span>(</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">openapi_tag</span>(<span class="at">name =</span> <span class="st">&quot;pet&quot;</span>, <span class="at">description =</span> <span class="st">&quot;Pets operations&quot;</span>),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">openapi_tag</span>(<span class="at">name =</span> <span class="st">&quot;toy&quot;</span>, <span class="at">description =</span> <span class="st">&quot;Toys operations&quot;</span>),</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">openapi_tag</span>(<span class="at">name =</span> <span class="st">&quot;toy space&quot;</span>, <span class="at">description =</span> <span class="st">&quot;Toys operations&quot;</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  ))</span></code></pre></div>
+</div>
+<h2 id="handler-annotations">Handler annotations</h2>
+<p>Handler annotation describe all aspects of a request handler and always proceeds a function which is considered the handler function. The following tags can be used in a handler block. The first line, unless it has a tag is considered the title of the handler and any proceeding lines until the first tag is considered a long-form description.</p>
+<h3 id="endpoint-block-annotations">Endpoint</h3>
+<table style="width:91%;">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 42%">
+</colgroup>
+<thead>
+<tr>
+<th>
+<p>
+Annotation
+</p>
+</th>
+<th>
+<p>
+Argument
+</p>
+</th>
+<th>
+<p>
+Description/References
+</p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="get">@get</span></code>, <code><span class="citation" data-cites="head">@head</span></code>, <code><span class="citation" data-cites="post">@post</span></code>, <code><span class="citation" data-cites="put">@put</span></code>, <code><span class="citation" data-cites="delete">@delete</span></code>, <code><span class="citation" data-cites="connect">@connect</span></code>, <code><span class="citation" data-cites="options">@options</span></code>, <code><span class="citation" data-cites="trace">@trace</span></code>, <code><span class="citation" data-cites="patch">@patch</span></code>, <code><span class="citation" data-cites="any">@any</span></code>
+</p>
+</td>
+<td>
+<p>
+<code>Path</code>
+</p>
+</td>
+<td>
+<p>
+<a href="./routing-and-input.html#endpoints">Endpoints</a>, <a href="./routing-and-input.html#dynamic-routes">Dynamic Routes</a>, <a href="./routing-and-input.html#typed-dynamic-routes">Typed Dynamic Routes</a>
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="header">@header</span></code>
+</p>
+</td>
+<td>
+<p>
+None
+</p>
+</td>
+<td>
+<p>
+Should the handler be attached to the header router
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="serializer">@serializer</span></code>
+</p>
+</td>
+<td>
+<p>
+<code>Alias</code>[<code>{Args list]}</code>]
+</p>
+<p>
+<code>Mime</code> <code>Function</code>
+</p>
+</td>
+<td>
+<p>
+Some serializers accept arguments. See <a href="./rendering-output.html#serializers">serializers article</a> and <a href="https://www.rplumber.io/reference/serializers.html">serializers reference</a>. Aliases : <code>r paste0(“&lt;code&gt;”, registered_serializers(), “&lt;/code&gt;”, collapse = “,”)</code> from <a href="https://www.rplumber.io/reference/register_serializer.html"><code>registered_serializers()</code></a>.
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="serializerStrict">@serializerStrict</span></code>
+</p>
+</td>
+<td>
+<p>
+None
+</p>
+</td>
+<td>
+<p>
+Turn on strict content negotiation. By default, the first serializer is chosen if the client requests a response type that isnt supported. By using strict content negotiation a 406 response is sent if the requested response type is not available
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="parser">@parser</span></code>
+</p>
+</td>
+<td>
+<p>
+<code>Alias</code>[<code>{Args list}</code>]
+</p>
+<p>
+<code>Mime</code> <code>Function</code>
+</p>
+</td>
+<td>
+<p>
+Some parsers accept arguments. See <a href="https://www.rplumber.io/reference/parsers.html">parsers reference</a>. Can be repeated to allow multiple parsers on the same endpoint. Aliases : <code>r paste0(“&lt;code&gt;”, registered_parsers(), “&lt;/code&gt;”, collapse = “,”)</code> from <a href="https://www.rplumber.io/reference/register_parser.html"><code>registered_parsers()</code></a>.
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="param">@param</span></code>, <code><span class="citation" data-cites="query">@query</span></code>, <code><span class="citation" data-cites="body">@body</span></code>
+</p>
+</td>
+<td>
+<p>
+<code>Name</code>[<code>:Type</code>][<code>(Default)</code>][<code>*</code>][<code>Description</code>]
+</p>
+</td>
+<td>
+<p>
+Adding an asterix indicates that the parameter is required. Can be repeated to define different parameters. If a single <code><span class="citation" data-cites="body">@body</span></code> tag is used the <code>Name</code> can be omitted to indicate that the body is not a named object but simply an instance of the given <code>Type</code>
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="response">@response</span></code>
+</p>
+</td>
+<td>
+<p>
+<code>Status</code>[<code>:Type</code>] <code>Description</code>
+</p>
+</td>
+<td>
+<p>
+Simple <a href="https://spec.openapis.org/oas/v3.0.3#response-object">Response object</a>. Can be repeated to define different responses.
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="download">@download</span></code>
+</p>
+</td>
+<td>
+<p>
+[<code>Filename</code>]
+</p>
+</td>
+<td>
+<p>
+Mark the response as something that should be downloaded, optionally setting a default filename for the file
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="tag">@tag</span></code>
+</p>
+</td>
+<td>
+<p>
+<code>Tag</code>
+</p>
+</td>
+<td>
+<p>
+Can be repeated to add multiple tags. Quote with or to use non word character (like spaces) in <code>Tag</code>. <a href="https://spec.openapis.org/oas/v3.0.3#operation-object">Tag field</a>
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="message">@message</span></code>
+</p>
+</td>
+<td>
+<p>
+None
+</p>
+</td>
+<td>
+<p>
+Marks the handler as a WebSocket message handler. No other tags will have an effect if this tag is present (except <code><span class="citation" data-cites="async">@async</span></code>)
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="async">@async</span></code>
+</p>
+</td>
+<td>
+<p>
+[<code>engine</code>]
+</p>
+</td>
+<td>
+<p>
+Marks the handler as running asynchronously. The default uses mirai, but a different registered engine can be specified as well
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="then">@then</span></code>
+</p>
+</td>
+<td>
+<p>
+None
+</p>
+</td>
+<td>
+<p>
+Chains the handler to the preceeding message or request handler if that handler is asynchronous
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="cors">@cors</span></code>
+</p>
+</td>
+<td>
+<p>
+[<code>Origin</code>]
+</p>
+</td>
+<td>
+<p>
+Add CORS to the endpoints in the handler. <code>Origin</code> can be a comma separated list of allowed origins
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="rip">@rip</span></code>
+</p>
+</td>
+<td>
+<p>
+[<code>Allowed Site</code>]
+</p>
+</td>
+<td>
+<p>
+Adds a resource isolation policy to the <code>get</code> endpoints in the handler. <code>Allowed Site</code> can be used to change the allowance level
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+<code><span class="citation" data-cites="noDoc">@noDoc</span></code>
+</p>
+</td>
+<td>
+<p>
+None
+</p>
+</td>
+<td>
+<p>
+Dont generate OpenAPI documentation from this block
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="more-details-on-type">More details on <code>Type</code></h4>
+<p>Types are used to define API inputs and outputs. For path parameters they can be given both in <code>@param</code> and inside the handler path. If they are given both places they <strong>must</strong> be in agreement. For query and body parameters they are given in their respective <code>@query</code> and <code>@body</code> tags.</p>
+<p>Some types can have a nested structure which is also supported, but the type spec can quickly become difficult to read the further you recurse so use with care</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>OpenAPI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>boolean</code></td>
+<td><code>boolean</code></td>
+</tr>
+<tr class="even">
+<td><code>number</code></td>
+<td><code>number</code></td>
+</tr>
+<tr class="odd">
+<td><code>integer</code></td>
+<td><code>integer</code></td>
+</tr>
+<tr class="even">
+<td><code>string</code></td>
+<td><code>string</code></td>
+</tr>
+<tr class="odd">
+<td><code>date</code></td>
+<td><code>string</code> <code>format:date</code></td>
+</tr>
+<tr class="even">
+<td><code>date-time</code></td>
+<td><code>string</code> <code>format:date-time</code></td>
+</tr>
+<tr class="odd">
+<td><code>byte</code></td>
+<td><code>string</code> <code>format:byte</code></td>
+</tr>
+<tr class="even">
+<td><code>binary</code></td>
+<td><code>string</code> <code>format:binary</code></td>
+</tr>
+<tr class="odd">
+<td><code>enum</code></td>
+<td><code>string</code> <code>enum:|...|</code></td>
+</tr>
+<tr class="even">
+<td><code>pattern</code></td>
+<td><code>string</code> <code>pattern:|...|</code></td>
+</tr>
+<tr class="odd">
+<td><code>[Type]</code></td>
+<td><code>array</code> <code>items:type:Type</code></td>
+</tr>
+<tr class="even">
+<td><code>{prop_name: Type, prop_name2: Type2}</code></td>
+<td><code>object</code> <code>properties:prop_name:type:Type</code> <code>properties:prop_name2:type:Type2</code></td>
+</tr>
+</tbody>
+</table>
+<p>Types can have a default value, which is given in parentheses after the type specification, e.g. <code>integer(10)</code>. For objects and arrays you should use JSON notation to describe the default value (e.g. <code>[integer]([2, 6, 1])</code>).</p>
+<p>For the <code>integer</code> and <code>number</code> types it is also possible to specify the lower and/or upper bounds of the value. This is done by putting these between <code>|</code> like so: <code>integer|3, 7|</code>. Omitting one of these will remove that bound requirement (e.g. <code>integer|,7|</code> only requires the input to be below or equal to 7). If combining this with a default value the range comes first (<code>integer|3,7|(5)</code>).</p>
+<p>The <code>enum</code> type is a factor type and you must provide the valid values of the type in between <code>|</code>, separated by comma and an optional whitespace. The <code>pattern</code> type is a string type that must match the regular expression given between <code>|</code>.</p>
+<p>The <code>date</code> and <code>date-time</code> types require the use of a specific format for the date or time described in <a href="https://datatracker.ietf.org/doc/html/rfc3339#section-5.6">RFC 3339, section 5.6</a>. The date must be given in full-date notation, e.g. <em>2017-07-21</em> while the date-time must be given in the date-time notation, e.g. <em>2017-07-21T17:32:28Z</em></p>
+<p>parameters can be specified as optional or required in their type notation. Path parameters are always required so any setting is ignored for this. A parameter can be marked as required by adding a <code>*</code> suffix to the type description, e.g. <code>arg1:integer*</code> to indicate that <code>arg1</code> is required and an integer. A parameter cannot both be required and have a default value (for reasons of logic).</p>
+<p>Apart from being used in the documentation of your API, the type information you provide for parameters will also be used to cast the incoming values to the correct type and add defaults if missing. Further, missing required parameters will result in an error. The response is not type checked so it is up to you to conform with the specification you provide.</p>
+<h5 id="annotations-example-5">Annotations example</h5>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /query/parameters</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @serializer text</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#* @query name:string*</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#* @query age:integer*</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(query) {</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sprintf</span>(<span class="st">&quot;%s is %i years old&quot;</span>, query<span class="sc">$</span>name, <span class="fu">max</span>(query<span class="sc">$</span>age))</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /dyn/&lt;name:string&gt;/&lt;age:integer&gt;/route</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#* @serializer text</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#* @parser none</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#* @response 200:string A sentence</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(name, age) {</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sprintf</span>(<span class="st">&quot;%s is %i years old&quot;</span>, name, age)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#* Upload a file and return the object as an rds</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">#*</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">#* @post /upload_file</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co">#* @serializer rds</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">#* @parser multi</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co">#* @body file:binary A file</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">#* @download</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(body) {</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  body<span class="sc">$</span>file</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#* @message</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(message, client_id, server) {</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.character</span>(message)) {</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    server<span class="sc">$</span><span class="fu">log</span>(<span class="st">&quot;message&quot;</span>, <span class="fu">paste0</span>(client_id, <span class="st">&quot; says &quot;</span>, message))</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="cn">NULL</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h5 id="equivalent-programmatic-usage-5">Equivalent programmatic usage</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>text_handler <span class="ot">&lt;-</span> <span class="cf">function</span>(name, age) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sprintf</span>(<span class="st">&quot;%s is %i years old&quot;</span>, name, <span class="fu">max</span>(age))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>qp_handler <span class="ot">&lt;-</span> <span class="cf">function</span>(query) {</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text_handler</span>(query<span class="sc">$</span>name, query<span class="sc">$</span>age)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>file_handler <span class="ot">&lt;-</span> <span class="cf">function</span>(body) {</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  body<span class="sc">$</span>f</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>msg_handler <span class="ot">&lt;-</span> <span class="cf">function</span>(message, client_id, server) {</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.character</span>(message)) {</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    server<span class="sc">$</span><span class="fu">log</span>(<span class="st">&quot;message&quot;</span>, <span class="fu">paste0</span>(client_id, <span class="st">&quot; says &quot;</span>, message))</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="cn">NULL</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="fu">api</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_get</span>(</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="st">&quot;/query/parameters&quot;</span>,</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">handler =</span> qp_handler,</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">serializers =</span> <span class="fu">get_serializers</span>(<span class="st">&quot;text&quot;</span>),</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">parsers =</span> <span class="fu">get_parsers</span>(),</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">doc =</span> <span class="fu">openapi_operation</span>(</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">parameters =</span> <span class="fu">list</span>(</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>        <span class="fu">openapi_parameter</span>(</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>          <span class="at">name =</span> <span class="st">&quot;name&quot;</span>,</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>          <span class="at">location =</span> <span class="st">&quot;query&quot;</span>,</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>          <span class="at">required =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>          <span class="at">schema =</span> <span class="fu">openapi_schema</span>(<span class="fu">character</span>())</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">openapi_parameter</span>(</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>          <span class="at">name =</span> <span class="st">&quot;age&quot;</span>,</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>          <span class="at">location =</span> <span class="st">&quot;query&quot;</span>,</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>          <span class="at">required =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>          <span class="at">schema =</span> <span class="fu">openapi_schema</span>(<span class="fu">integer</span>())</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_get</span>(</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="st">&quot;/dyn/&lt;name:string&gt;/&lt;age:integer&gt;/route&quot;</span>,</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">handler =</span> text_handler,</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">serializers =</span> <span class="fu">get_serializers</span>(<span class="st">&quot;text&quot;</span>),</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">doc =</span> <span class="fu">openapi_operation</span>(</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>      <span class="at">responses =</span> <span class="fu">list</span>(</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;200&quot;</span> <span class="ot">=</span> <span class="fu">openapi_response</span>(</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>          <span class="at">description =</span> <span class="st">&quot;A sentence&quot;</span>,</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>          <span class="at">content =</span> <span class="fu">openapi_content</span>(</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;text/plain&quot;</span> <span class="ot">=</span> <span class="fu">openapi_schema</span>(<span class="fu">character</span>())</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_post</span>(</span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="st">&quot;/upload_file&quot;</span>,</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">handler =</span> file_handler,</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">serializers =</span> <span class="fu">get_serializers</span>(<span class="st">&quot;rds&quot;</span>),</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">parsers =</span> <span class="fu">get_parsers</span>(<span class="st">&quot;multi&quot;</span>),</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">doc =</span> <span class="fu">openapi_operation</span>(</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>      <span class="at">description =</span> <span class="st">&quot;Upload an rds file and return the object&quot;</span>,</span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>      <span class="at">request_body =</span> <span class="fu">openapi_request_body</span>(</span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>        <span class="at">content =</span> <span class="fu">openapi_content</span>(</span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;multipart/form-data&quot;</span> <span class="ot">=</span> <span class="fu">openapi_schema</span>(<span class="fu">list</span>(<span class="at">file =</span> <span class="fu">raw</span>()))</span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_message</span>(msg_handler)</span></code></pre></div>
+</div>
+<h2 id="static-block-annotations">Asset annotation</h2>
+<p>There are two ways to serve static content in plumber2 and they differ in subtle ways. The <code>@assets</code> tag instruct plumber to create a regular handler that matches the mount path (defaults to <code>/</code>) and will serve files from <code>Path</code>. The <code>@statics</code> tag works the same, but rather than create a handler it instructs httpuv (which is the low-level package powering plumber2) to serve the files before the request even reaches the R process. This makes it much faster but also limited in flexibility since the request never reaches your code and you are unable to modify it. In general, you should use <code>@statics</code> unless you need to provide any additional handling of the request, such as authentication or logging.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Annotation</th>
+<th>Arguments</th>
+<th>Description/References</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>@assets</code></td>
+<td><code>Path</code> [<code>Mount path</code>]</td>
+<td><a href="./routing-and-input.html#static-file-handler">Static files</a></td>
+</tr>
+<tr class="even">
+<td><code>@statics</code></td>
+<td><code>Path</code> [<code>Mount path</code>]</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>@except</code></td>
+<td><code>Path</code></td>
+<td>Can be used together with <code>@statics</code> to exclude subpaths of the <code>@statics</code> <code>Path</code> from being served.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="annotations-example-6">Annotations example</h5>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @assets ./assets/files</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cn">NULL</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#* @assets ./assets/files /assets</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cn">NULL</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#* @statics ./assets/static_files</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#* @except /secret_files</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="cn">NULL</span></span></code></pre></div>
+<h5 id="equivalent-programmatic-usage-note-that-argument-order-is-reversed">Equivalent programmatic usage (note that argument order is reversed)</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">api</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_assets</span>(<span class="st">&quot;/&quot;</span>, <span class="st">&quot;./assets/files&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">api</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_assets</span>(<span class="st">&quot;/assets&quot;</span>, <span class="st">&quot;./assets/files&quot;</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">api</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_statics</span>(<span class="st">&quot;/&quot;</span>, <span class="st">&quot;./assets/static_files&quot;</span>, <span class="at">except =</span> <span class="st">&quot;/secret_files&quot;</span>)</span></code></pre></div>
+</div>
+<h2 id="plumber-block-annotations">plumber2 annotation</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Annotation</th>
+<th>Arguments</th>
+<th>Description/References</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>@plumber</code></td>
+<td>None</td>
+<td>Modify plumber router from plumber file. If the function returns a plumber2 api object then this object will be used going forward, otherwise the return value is ignored. In most cases, anonymous functions are used following the <code>#* @plumber</code> annotation. However, named functions can also be used. When a named function is used, it must be referenced without parentheses.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="annotations-example-7">Annotations example</h5>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @plumber</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(api) {</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  api <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">api_doc_setting</span>(<span class="st">&quot;swagger&quot;</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Named function</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>use_swagger <span class="ot">&lt;-</span> <span class="cf">function</span>(api) {</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  api <span class="sc">%&gt;%</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">api_doc_setting</span>(<span class="st">&quot;swagger&quot;</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">#* @plumber</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>use_swagger</span></code></pre></div>
+<h5 id="equivalent-programmatic-usage-6">Equivalent programmatic usage</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">api</span>() <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_doc_setting</span>(<span class="st">&quot;swagger&quot;</span>)</span></code></pre></div>
+</div>
+<h2 id="forwards-and-redirects">Forwards and redirects</h2>
+<p>plumber2 allows you to orchestrate requests that are ultimately handled elsewhere. There are two approaches to this. Either return a redirect response and let the client follow that to the new location, or handle it directly by forwarding the request to another origin and passing along the response to the client (this is called a reverse proxy). Both of these are considered somewhat advanced use.</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Annotation</th>
+<th>Arguments</th>
+<th>Description/References</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>@redirect</code></td>
+<td>[!]<code>Method</code> <code>From</code> <code>To</code></td>
+<td>Will add a redirect response for the method given as <code>Method</code> from the path given in <code>From</code> to the path given in <code>To</code>. Path parameters are supported and will be matched between <code>Trom</code> and <code>To</code>. If the method is preceded by a <code>!</code> then the redirect is considered permanent (308) — otherwise it is considered temporary (307)</td>
+</tr>
+<tr class="even">
+<td><code>@forward</code></td>
+<td><code>Path</code> <code>URL</code></td>
+<td>Will forward requests from <code>Path</code> to <code>URL</code>, acting as a reverse proxy. The proxy will also forward any WebSocket messaging that is established with <code>Path</code>. All forwarding is performed asynchronously so the api will not block if the URL takes a long time to respond.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="annotation-example">Annotation example</h5>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @redirect !any old/&lt;path&gt; new/&lt;path&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @redirect get main/&lt;path&gt; temp/main/&lt;path&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cn">NULL</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#* @forward proxy/server http://127.0.0.1:56789</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="cn">NULL</span></span></code></pre></div>
+<h5 id="equivalent-programmatic-usage-7">Equivalent programmatic usage</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">api</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_redirect</span>(<span class="st">&quot;any&quot;</span>, <span class="st">&quot;old/&lt;path&gt;&quot;</span>, <span class="st">&quot;new/&lt;path&gt;&quot;</span>, <span class="at">permanent =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_redirect</span>(<span class="st">&quot;get&quot;</span>, <span class="st">&quot;main/*&quot;</span>, <span class="st">&quot;temp/main/*&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_forward</span>(<span class="st">&quot;proxy/server&quot;</span>, <span class="st">&quot;http://127.0.0.1:56789&quot;</span>)</span></code></pre></div>
+</div>
+<h2 id="shiny">Shiny</h2>
+<p>plumber2 can serve one or more shiny apps at specified paths. It works by launching the shiny app defined below the block in a separate process and then forward requests to the defined path to the process. The shiny app is automatically launched and stopped along with the main plumber2 api.</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Annotation</th>
+<th>Arguments</th>
+<th>Description/References</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>@shiny</code></td>
+<td><code>Path</code></td>
+<td>Launc the app defined below the annotation block and forward requests to <code>Path</code> to it</td>
+</tr>
+</tbody>
+</table>
+<h5 id="annotation-example-1">Annotation example</h5>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @shiny app/</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">shinyAppDir</span>(<span class="st">&quot;path/to/shiny/app&quot;</span>)</span></code></pre></div>
+<h5 id="equivalent-programmatic-usage-8">Equivalent programmatic usage</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">api</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_shiny</span>(<span class="st">&quot;app/&quot;</span>, <span class="fu">shinyAppDir</span>(<span class="st">&quot;path/to/shiny/app&quot;</span>))</span></code></pre></div>
+</div>
+<h2 id="reports">Reports</h2>
+<p>plumber2 can automatically serve Rmarkdown and Quarto reports. The report will be rendered upon request but cached for the future. Different output formats can be selected through the <code>Content-Type</code> request header as long as a matching format is specified in the reports yaml header. Query parameters are automatically passed in as parameters to the report to support parameterized reports natively. Reports can be annotated just like standard request handlers to have OpenAPI documentation generated for it. Rendering is performed asynchronously so the api is not blocked by someone requesting a report that takes a while to render</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Annotation</th>
+<th>Arguments</th>
+<th>Description/References</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>@report</code></td>
+<td><code>Path</code></td>
+<td>Serve a report given by the path specified below the annotation block from <code>Path</code>. The report location is relative to the path of the annotation file</td>
+</tr>
+</tbody>
+</table>
+<h5 id="annotation-example-2">Annotation example</h5>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* Access the quarterly report</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#*</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">#* @query quarter:enum|spring, summer, autumn, winter| The quarter to generate the report for</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#*</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#* @report quarterly/</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;my_amazing_report.qmd&quot;</span></span></code></pre></div>
+<h5 id="equivalent-programmatic-usage-9">Equivalent programmatic usage</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">api</span>() <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_add_route</span>(routr<span class="sc">::</span><span class="fu">report_route</span>(<span class="st">&quot;quarterly/&quot;</span>, <span class="st">&quot;my_amazing_report.qmd&quot;</span>))</span></code></pre></div>
+</div>
+<p>Note that the programmatic usage doesn’t add any documentation by itself</p>
+
+
+
+
+
+</body></html>
