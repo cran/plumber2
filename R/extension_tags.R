@@ -30,7 +30,7 @@ tag_extensions$tag <- list()
 #'
 #' @seealso [apply_plumber2_block()]
 #'
-#' @examples
+#' @examplesIf FALSE
 #' # Add a tag that says hello when used
 #' add_plumber2_tag("hello", function(block, call, tags, values, env) {
 #'   message("Hello")

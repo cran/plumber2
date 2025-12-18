@@ -4,16 +4,16 @@
 \name{plumber2-package}
 \alias{plumber2}
 \alias{plumber2-package}
-\title{plumber2: Easy and Powerful Web Servers}
+\title{plumber2: Easy and Powerful Webservers}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Automatically create a web server from annotated 'R' files or by building it up programmatically. Provides automatic 'OpenAPI' documentation, input handling, asynchronous evaluation, and plugin support.
+Automatically create a webserver from annotated 'R' files or by building it up programmatically. Provides automatic 'OpenAPI' documentation, input handling, async support, and middleware support.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{http://plumber2.posit.co/}
+  \item \url{https://plumber2.posit.co/}
   \item \url{https://github.com/posit-dev/plumber2}
   \item Report bugs at \url{https://github.com/posit-dev/plumber2/issues}
 }
@@ -24,7 +24,7 @@ Useful links:
 
 Other contributors:
 \itemize{
-  \item Posit Software, PBC (03wc8by49) [copyright holder, funder]
+  \item Posit Software, PBC (\href{https://ror.org/03wc8by49}{ROR}) [copyright holder, funder]
 }
 
 }

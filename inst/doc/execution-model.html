@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -92,7 +92,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Incoming HTTP requests are serviced in the order in which they appeared, but if requests are coming in more quickly than they can be processed by the API, a backlog of requests will accrue. The common solutions to this problem are to do either or both of:</p>
 <ol type="1">
 <li>Keep your API performant. All filters and endpoints should complete very quickly and any long-running or complicated tasks should be done outside of the API process.</li>
-<li>Run multiple R processes to redundantly host a single plumber2 API and load-balance incoming requests between all available processes.</li>
+<li>Run multiple R processes to redundantly host a single plumber2 API and load-balance incoming requests between all available processes. See the hosting section for details on which hosting environments support this feature.</li>
 </ol>
 <h2 id="managing-state">Managing State</h2>
 <p>Often, plumber2 APIs will require coordination of some state. This state may need to be shared between multiple endpoints in the same API (e.g. a counter that increments every time an endpoint is invoked). Alternatively, it could be information that needs to be persisted across requests from a single client (e.g. storing a preference or setting for some user). Lastly, it might require coordinating between multiple plumber2 processes running independently behind a load-balancer. Each of these scenarios have unique properties that determine which solution might be appropriate.</p>

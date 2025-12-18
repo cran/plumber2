@@ -34,6 +34,7 @@ a modified version of \code{block}. If you add a subclass to \code{block} you sh
 make sure that a method for \code{\link[=apply_plumber2_block]{apply_plumber2_block()}} for the subclass exists.
 }
 \examples{
+\dontshow{if (FALSE) withAutoprint(\{ # examplesIf}
 # Add a tag that says hello when used
 add_plumber2_tag("hello", function(block, call, tags, values, env) {
   message("Hello")
@@ -41,7 +42,7 @@ add_plumber2_tag("hello", function(block, call, tags, values, env) {
   block
 })
 
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=apply_plumber2_block]{apply_plumber2_block()}}

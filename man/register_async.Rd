@@ -31,6 +31,7 @@ default evaluator is controlled by the \code{plumber2.async} option or the
 \code{PLUMBER2_ASYNC} environment variable.
 }
 \examples{
+\dontshow{if (FALSE) withAutoprint(\{ # examplesIf}
 # Register an async evaluator based on future (the provided mirai backend is
 # superior in every way so this is for illustrative purpose)
 future_async <- function(...) {
@@ -44,5 +45,5 @@ future_async <- function(...) {
   }
 }
 register_async("future", future_async, c("promises", "future"))
-
+\dontshow{\}) # examplesIf}
 }
