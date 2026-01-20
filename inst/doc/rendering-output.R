@@ -28,6 +28,7 @@ jsonlite::toJSON(list(a=5))
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 pa <- api(file.path(me, "files/apis/04-03-letters.R"))
 
@@ -39,6 +40,7 @@ code_chunk(res$body, "json")
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 req <- fiery::fake_request("http://localhost:8080/boxed?letter=Y")
 res <- pa$test_request(req)
@@ -48,6 +50,7 @@ code_chunk(res$body, "json")
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 req <- fiery::fake_request("http://localhost:8080/unboxed?letter=Y")
 res <- pa$test_request(req)
@@ -95,6 +98,7 @@ code_chunk(res$body, "json")
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 pa <- api(file.path(me, "files/apis/04-05-error.R"))
 
@@ -112,6 +116,7 @@ code_chunk(res$body, "json")
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 pa <- api(file.path(me, "files/apis/06-01-capitalize.R"))
 

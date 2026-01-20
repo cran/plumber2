@@ -129,6 +129,30 @@ api() |>
 #| output: false
 #| eval: !expr R.Version()$minor > package_version("4.0")
 api() |>
+  api_datastore(storr::driver_environment()) |> 
+  api_auth_guard(
+    fireproof::guard_key(
+      key_name = "plumber2_key",
+      validate = "MY_VERY_SECRET_SECRET"
+    ),
+    "auth1"
+  )
+
+
+## -----------------------------------------------------------------------------
+#| output: false
+#| eval: !expr R.Version()$minor > package_version("4.0")
+api() |>
+  api_datastore(
+    driver = storr::driver_environment(),
+    store_name = "persistent_data"
+  )
+
+
+## -----------------------------------------------------------------------------
+#| output: false
+#| eval: !expr R.Version()$minor > package_version("4.0")
+api() |>
   api_doc_setting("swagger")
 
 

@@ -7,6 +7,7 @@
 \alias{logger_console}
 \alias{logger_file}
 \alias{logger_logger}
+\alias{logger_otel}
 \alias{logger_switch}
 \alias{common_log_format}
 \alias{combined_log_format}
@@ -21,6 +22,8 @@ logger_console(format = "{time} - {event}: {message}")
 logger_file(file, format = "{time} - {event}: {message}")
 
 logger_logger(default_level = "INFO")
+
+logger_otel(format = "{message}")
 
 logger_switch(..., default = logger_null())
 
@@ -38,7 +41,9 @@ plumber2 (through fiery) provides the predefined \code{common_log_format} and
 \code{combined_log_format}, but you can easily create your own. See
 \link[fiery:loggers]{fiery::loggers} for which variables the glue string has access to.}
 
-\item{format}{A \link[glue:glue]{glue} string specifying the format of the log entry}
+\item{format}{A \link[glue:glue]{glue}-like string specifying the format of the
+log entry. Only the variables \code{time}, \code{event}, and \code{message} are available
+and must be given verbatim}
 
 \item{file}{A file or connection to write to}
 

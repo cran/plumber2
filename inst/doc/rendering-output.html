@@ -219,20 +219,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>This is an example of an API that, in some instance, produces a scalar, and in other instances produces a vector.</p>
 <p>Visiting http://localhost:8080/boxed?letter=U or http://localhost:8080/unboxed?letter=U will return identical responses:</p>
-<pre><code>#&gt; Creating 04-03-letters route in request router</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;V&quot;</span><span class="ot">,</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;W&quot;</span><span class="ot">,</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;X&quot;</span><span class="ot">,</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Y&quot;</span><span class="ot">,</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Z&quot;</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;V&quot;</span><span class="ot">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;W&quot;</span><span class="ot">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;X&quot;</span><span class="ot">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Y&quot;</span><span class="ot">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Z&quot;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
 <p>However, http://localhost:8080/boxed?letter=Y will produce:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Z&quot;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Z&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
 <p>while http://localhost:8080/unboxed?letter=Y will produce:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="er">&quot;Z&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="er">&quot;Z&quot;</span></span></code></pre></div>
 <p>The <code>/boxed</code> endpoint, as the name implies, produces “boxed” JSON output in which length-1 vectors are still rendered as an array. Conversely, the <code>/unboxed</code> endpoint sets <code>auto_unbox=TRUE</code> in its call to <code>jsonlite::toJSON</code>, causing length-1 R vectors to be rendered as JSON scalars.</p>
 <p>While R doesn’t distinguish between scalars and vectors, API clients may respond very differently when encountering a JSON array versus an atomic value. You may find that your API clients will not respond gracefully when an object that they expected to be a vector becomes a scalar in one call.</p>
 <p>For this reason, Plumber inherits the <code>jsonlite::toJSON</code> default of setting <code>auto_unbox=FALSE</code> which will result in all length-1 vectors still being rendered as JSON arrays. You can configure an endpoint to use the <code>unboxedJSON</code> serializer (as shown above) if you want to alter this behavior for a particular endpoint.</p>
@@ -280,71 +279,71 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p>As with the standard serializers the behaviour of these can be modified by specifying additional arguments to the serializer. Many of these arguments are well-known from using graphics devices in R including <code>width</code>, <code>height</code>, and <code>bg</code> among others.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* Example of customizing graphical output</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @serializer png{width = 400, height = 500}</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* Example of customizing graphical output</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @serializer png{width = 400, height = 500}</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <p>Arguments inside the curly braces are evaluated in the same environment as the handler so any R expression will be valid. However, they are evaluated only once, when parsing the file, so it is not possible to provide dynamic serializer settings in this way. If you wish to dynamically size images, you will need render and capture the graphical output yourself and return the contents with the appropriate <code>Content-Type</code> header. See the existing image renderers as a model of how to do this.</p>
 <h3 id="bypassing-serialization">Bypassing Serialization</h3>
 <p>In some instances it may be desirable to return a value directly from R without serialization. You can do this by settings <code>@serializer none</code> which will turn off any automatic serialization by plumber. Consider the following handler:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* Endpoint that bypasses serialization</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#* @serializer none</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(response) {</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  response<span class="sc">$</span>body <span class="ot">&lt;-</span> <span class="st">&quot;Literal text here!&quot;</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* Endpoint that bypasses serialization</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#* @serializer none</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(response) {</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  response<span class="sc">$</span>body <span class="ot">&lt;-</span> <span class="st">&quot;Literal text here!&quot;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <p>The response that is returned from this endpoint would contain the body <code>Literal text here!</code> with no <code>Content-Type</code> header and without any additional serialization.</p>
 <p>In a similar vein you can set a <code>Content-Type</code> but otherwise leave the body unchanged by providing a mime type to <code>@serializer</code>. You can use this annotation when you want more control over the response that you send.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @serializer application/pdf</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /pdf</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pdf</span>(tmp)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">type=</span><span class="st">&quot;b&quot;</span>)</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">4</span>, <span class="dv">8</span>, <span class="st">&quot;PDF from plumber!&quot;</span>)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">6</span>, <span class="dv">2</span>, <span class="fu">paste</span>(<span class="st">&quot;The time is&quot;</span>, <span class="fu">Sys.time</span>()))</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dev.off</span>()</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">readBin</span>(tmp, <span class="st">&quot;raw&quot;</span>, <span class="at">n=</span><span class="fu">file.info</span>(tmp)<span class="sc">$</span>size)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @serializer application/pdf</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /pdf</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pdf</span>(tmp)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">type=</span><span class="st">&quot;b&quot;</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">4</span>, <span class="dv">8</span>, <span class="st">&quot;PDF from plumber!&quot;</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">6</span>, <span class="dv">2</span>, <span class="fu">paste</span>(<span class="st">&quot;The time is&quot;</span>, <span class="fu">Sys.time</span>()))</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dev.off</span>()</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">readBin</span>(tmp, <span class="st">&quot;raw&quot;</span>, <span class="at">n=</span><span class="fu">file.info</span>(tmp)<span class="sc">$</span>size)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <p>Running this API and visiting http://localhost:8080/pdf will download the PDF generated from R (or display the PDF natively, if your client supports it).</p>
 <h3 id="custom-serializers">Custom serializers</h3>
 <p>While plumber2 comes with serializers that cover most use cases you may want to provide your own. You can do so in two ways. Either by registering your serializer and refering to it by name as you would with any other native serializer, or by specifying it inline. You may want to serve toml files but plumber doesn’t (yet) ship with a serializer for this. You could quickly create your own using <code>blogdown::write_toml()</code>. Serializers in plumber2 are factory functions that take a range of arguments and return a unary function capable of formatting the response body:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>format_toml <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) {</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    blogdown<span class="sc">::</span><span class="fu">write_toml</span>(x)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>format_toml <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) {</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    blogdown<span class="sc">::</span><span class="fu">write_toml</span>(x)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <p>You could use this directly in a handler with <code>@serializer application/toml format_toml()</code> or you could register it:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">register_serializer</span>(<span class="st">&quot;toml&quot;</span>, format_toml, <span class="st">&quot;application/toml&quot;</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">register_serializer</span>(<span class="st">&quot;toml&quot;</span>, format_toml, <span class="st">&quot;application/toml&quot;</span>)</span></code></pre></div>
 </div>
 <p>and use it like any other serializer: <code>@serializer toml</code></p>
 <h2 id="error-handling">Error Handling</h2>
 <p>Plumber wraps each endpoint invocation so that it can gracefully capture errors.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* Example of throwing an error</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /simple</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">&quot;I&#39;m an error!&quot;</span>)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#* Generate a friendly error</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /friendly</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abort_bad_request</span>(</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Your request could not be parsed&quot;</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* Example of throwing an error</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /simple</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">&quot;I&#39;m an error!&quot;</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#* Generate a friendly error</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /friendly</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abort_bad_request</span>(</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Your request could not be parsed&quot;</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <p>If you run this API in interactive mode and visit http://localhost:8080/simple, you’ll notice two things:</p>
 <ol type="1">
@@ -352,49 +351,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The error is printed to the console</li>
 </ol>
 <p>This means that it is possible for you to intentionally use <code>stop()</code> in a handler as a way to communicate a problem to your user. However, since most information is stripped away from the response, it may be preferable to provide a bit more detail to the user. reqres, provides a set of abort calls that works like <code>stop()</code> but also carry on information about the status code and message to send to the client. Read more at the <a href="https://reqres.data-imaginist.com/reference/abort_http_problem.html">reqres website</a>. Visiting the second handler we can see it in action:</p>
-<pre><code>#&gt; Creating 04-05-error route in request router</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;https://datatracker.ietf.org/doc/html/rfc9110#section-15.5.1&quot;</span><span class="fu">,</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;title&quot;</span><span class="fu">:</span> <span class="st">&quot;Bad Request&quot;</span><span class="fu">,</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="dv">400</span><span class="fu">,</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;detail&quot;</span><span class="fu">:</span> <span class="st">&quot;Your request could not be parsed&quot;</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;https://datatracker.ietf.org/doc/html/rfc9110#section-15.5.1&quot;</span><span class="fu">,</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;title&quot;</span><span class="fu">:</span> <span class="st">&quot;Bad Request&quot;</span><span class="fu">,</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="dv">400</span><span class="fu">,</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;detail&quot;</span><span class="fu">:</span> <span class="st">&quot;Your request could not be parsed&quot;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h2 id="setting-cookies">Setting Cookies</h2>
 <p>As part of fulfilling a request, a Plumber API can choose to set HTTP cookies on the client. HTTP APIs don’t implicitly contain a notion of a “session.” Without some additional information, Plumber has no way of ascertaining whether or not two HTTP requests that come in are associated with the same user. Cookies offer a way to commission the client to store some state on your behalf so that selected data can outlive a single HTTP request; the full implications of using cookies to track state in your API are discussed <a href="./execution-model.html#state-cookies">here</a>. The two forms of Plumber cookies – plain-text and encrypted – are discussed in the following sections.</p>
 <p>Before you make cookies an important part of your API’s security model, be sure to understand the section on the <a href="./security.html#security-cookies">security considerations when working with cookies</a>.</p>
 <h3 id="setting-unencrypted-cookies">Setting Unencrypted Cookies</h3>
 <p>Plumber can both set and receive plaint-text cookies. The API endpoint below will return a random letter, but it remembers your preferences on whether you like capitalized or lower-case letters.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @put /preferences</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @body capital:integer*</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(response, body) {</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  response<span class="sc">$</span><span class="fu">set_cookie</span>(<span class="st">&quot;capitalize&quot;</span>, body<span class="sc">$</span>capital)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /letter</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(request) {</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  capitalize <span class="ot">&lt;-</span> request<span class="sc">$</span>cookies<span class="sc">$</span>capitalize</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Default to lower-case unless user preference is capitalized</span></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  alphabet <span class="ot">&lt;-</span> letters</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The capitalize cookie will initially be empty (NULL)</span></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(capitalize) <span class="sc">&amp;&amp;</span> capitalize <span class="sc">==</span> <span class="st">&quot;1&quot;</span>){</span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    alphabet <span class="ot">&lt;-</span> LETTERS</span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">letter =</span> <span class="fu">sample</span>(alphabet, <span class="dv">1</span>)</span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @put /preferences</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @body capital:integer*</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(response, body) {</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  response<span class="sc">$</span><span class="fu">set_cookie</span>(<span class="st">&quot;capitalize&quot;</span>, body<span class="sc">$</span>capital)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /letter</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(request) {</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  capitalize <span class="ot">&lt;-</span> request<span class="sc">$</span>cookies<span class="sc">$</span>capitalize</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Default to lower-case unless user preference is capitalized</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  alphabet <span class="ot">&lt;-</span> letters</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The capitalize cookie will initially be empty (NULL)</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(capitalize) <span class="sc">&amp;&amp;</span> capitalize <span class="sc">==</span> <span class="st">&quot;1&quot;</span>){</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    alphabet <span class="ot">&lt;-</span> LETTERS</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">letter =</span> <span class="fu">sample</span>(alphabet, <span class="dv">1</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <p>Since this API is using a <code>PUT</code> request to test this API, we’ll use <code>curl</code> on the command line to test it. (There’s nothing about cookies that necessitates <code>PUT</code> requests; you could just as easily modify this API to use a <code>GET</code> request.) We can start by visiting the <code>/letter</code> endpoint and we’ll see that the API defaults to a lower-case alphabet. <code>curl http://localhost:8080/letter</code></p>
-<pre><code>#&gt; Creating 06-01-capitalize route in request router</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;letter&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;b&quot;</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;letter&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;x&quot;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <p>If we send a <code>PUT</code> request and specify the <code>capital</code> parameter, a cookie will be set on the client which will allow the server to accommodate our preference in future requests. In <code>curl</code>, you need to specify a file in which you want to save these cookies using the <code>-c</code> option. This is a good reminder that clients handle cookies differently – some won’t support them at all – so be sure that the clients you intend to support with your API play nicely with cookies if you want to use them.</p>
 <p>To send a <code>PUT</code> request, setting the parameter <code>capital</code> to <code>1</code>, we could invoke: <code>curl -c cookies.txt -X PUT --data &#39;capital=1&#39; &quot;http://localhost:8800/preferences&quot;</code>. If you print out the <code>cookies.txt</code> file, you should now see that it contains a single cookie called <code>capitalize</code> with a value of <code>1</code>.</p>
 <p>We can make another <code>GET</code> request to <code>/letter</code> to see if it accommodates our preferences. But we’ll need to tell <code>curl</code> to use the cookies file we just created when sending this request using the <code>-b</code> switch: <code>curl -b cookies.txt http://localhost:8080/letter</code>. You should now see that the API is returning a random capitalized letter.</p>
@@ -404,21 +401,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 id="encrypted-cookies">Setting Encrypted Cookies</h3>
 <p>In addition to storing plain-text cookies, Plumber also supports handling cookies that are encrypted. Encrypted cookies prevent your users from seeing what is stored inside of them and also sign their contents so that users can’t modify what is stored.</p>
 <p>To use this feature, you must explicitly add it to your router after constructing it. For example, you could run the following sequence of commands to create a router that supports encrypted session cookies.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">api</span>(<span class="st">&quot;myfile.R&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_session_cookie</span>(<span class="st">&quot;my_secret_here&quot;</span>, <span class="st">&quot;cookie_name&quot;</span>, ...) <span class="sc">%&gt;%</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_run</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">api</span>(<span class="st">&quot;myfile.R&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_session_cookie</span>(<span class="st">&quot;my_secret_here&quot;</span>, <span class="st">&quot;cookie_name&quot;</span>, ...) <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">api_run</span>()</span></code></pre></div>
 <p>Once you have used <code>api_session_cookie()</code>, you’ll be able to use the <code>request$session</code> and <code>response$session</code> object (they point to the same data) to read and set data that will be transmitted as an encrypted cookie named <code>cookie_name</code>. In this example, the key used to encrypt the data is <code>&quot;my_secret_here&quot;</code>, which will not work since a 32-bit key is required for security reasons. You can construct a compliant key with <code>reqres::random_key</code> and store it securely using the keyring package.</p>
 <p>Unlike <code>response$set_header()</code>, the values attached to the <code>session</code> data <em>are</em> serialized via <code>jsonlite</code>; so you’re free to use more complex data structures like lists in your session. However, the deserializing is done “blindly” using <code>jsonlite::fromJSON()</code> so you should always verify that type conversion has been done correctly if you are storing ambiguous values (e.g. storing <code>&quot;5&quot;</code> (the string) will get deserialized to <code>5</code> (the number) in the next request).</p>
 <p>As an example, we’ll store an encrypted cookie that counts how many times this client has visited a particular endpoint:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /sessionCounter</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(request){</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  count <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(request<span class="sc">$</span>session<span class="sc">$</span>counter)){</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    count <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(request<span class="sc">$</span>session<span class="sc">$</span>counter)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  request<span class="sc">$</span>session<span class="sc">$</span>counter <span class="ot">&lt;-</span> count <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">&quot;This is visit #&quot;</span>, count)</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /sessionCounter</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(request){</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  count <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(request<span class="sc">$</span>session<span class="sc">$</span>counter)){</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    count <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(request<span class="sc">$</span>session<span class="sc">$</span>counter)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  request<span class="sc">$</span>session<span class="sc">$</span>counter <span class="ot">&lt;-</span> count <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">&quot;This is visit #&quot;</span>, count)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Again, you would need to setup your api using the <code>api_session_cookie()</code> function before this code would work.</p>
 <p>If you inspect the cookie being set in your browser, you’ll find that its value is encrypted by the time it gets to the client. But by the time it arrives in Plumber, your cookie is available as a regular R list and can be read or modified.</p>
 <p>While session cookies are a great way to store state without setting up any additional facilities for it on your server, you should be aware that the session cookie is transmitted with each request/response and need to be encrypted and decrypted every time (the last part only happens if you try to read from it though). Using it thus adds to the server load so weigh the pros and cons of managing session state with it.</p>

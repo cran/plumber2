@@ -24,6 +24,7 @@ readLines <- function(x) base::readLines(file.path(me, x))
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 pa <- api(file.path(me, "files/apis/07-01-plot-unsafe.R"))
 
@@ -35,6 +36,7 @@ cat('<img src="data:image/png;base64,', base64enc::base64encode(res$body), '">')
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 req <- fiery::fake_request("http://localhost:8080?pts=10000")
 t <- system.time(res <- pa$test_request(req))
@@ -58,4 +60,19 @@ cat('<img src="data:image/png;base64,', base64enc::base64encode(res$body), '">')
 #| eval: false
 #| code: !expr readLines("files/apis/07-04-file-safe.R")
 # NA
+
+
+## -----------------------------------------------------------------------------
+#| eval: false
+# pa <- api() |>
+#   api_security_headers()
+
+
+## -----------------------------------------------------------------------------
+#| eval: false
+# #* @get /sensitive/info
+# #* @cors https://I-trust-you.com
+# function(...) {
+#   # endpoint logic
+# }
 

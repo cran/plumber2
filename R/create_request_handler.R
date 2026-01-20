@@ -103,13 +103,15 @@ create_sequential_request_handler <- function(
     }
 
     # Add serializers for the finalizing route
-    success <- response$set_formatter(
-      !!!serializers,
-      default = if (use_strict_serializer) NULL else names(serializers)[1]
-    )
-    if (!success) {
-      # Shortcircuit evaluation if we cannot serve the requested content type
-      return(Break)
+    if (length(serializers) > 0) {
+      success <- response$set_formatter(
+        !!!serializers,
+        default = if (use_strict_serializer) NULL else names(serializers)[1]
+      )
+      if (!success) {
+        # Short-circuit evaluation if we cannot serve the requested content type
+        return(Break)
+      }
     }
 
     # Mark body as download if requested
@@ -130,7 +132,7 @@ create_sequential_request_handler <- function(
     )
 
     # Call the handler with all available data. If formatter is a device
-    # serialiser with_formatter() will set up the correct promise domain. If not
+    # serializer with_formatter() will set up the correct promise domain. If not
     # it is a no-op
     result <- with_formatter(
       inject(handler(
@@ -228,13 +230,15 @@ create_async_request_handler <- function(
     }
 
     # Add serializers for the finalizing route
-    success <- response$set_formatter(
-      !!!serializers,
-      default = if (use_strict_serializer) NULL else names(serializers)[1]
-    )
-    if (!success) {
-      # Shortcircuit evaluation if we cannot serve the requested content type
-      return(Break)
+    if (length(serializers) > 0) {
+      success <- response$set_formatter(
+        !!!serializers,
+        default = if (use_strict_serializer) NULL else names(serializers)[1]
+      )
+      if (!success) {
+        # Short-circuit evaluation if we cannot serve the requested content type
+        return(Break)
+      }
     }
 
     # Mark body as download if requested
@@ -242,7 +246,7 @@ create_async_request_handler <- function(
       response$as_download(dl_file)
     }
 
-    # Collect all variables - minimise the amount of data send to async
+    # Collect all variables - minimize the amount of data send to async
     envir$formatter <- response$formatter
     envir$keys <- type_casters$path(keys)
     envir$id <- id
@@ -299,7 +303,7 @@ async_request_call <- quote({
   )
 
   # Call the handler with all available data. We don't need a promise domain for
-  # device serialisers since it happens sequentially in the other process
+  # device serializers since it happens sequentially in the other process
   result <- rlang::inject(handler(
     !!!keys,
     client_id = id,

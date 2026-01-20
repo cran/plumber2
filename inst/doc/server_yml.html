@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>_server.yml for framework developers</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+width: 0.8em;
+margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+}
+pre.numberSource { margin-left: 3em; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+
+
+<style type="text/css">body {background-color: #fff;margin: 1em auto;max-width: 700px;overflow: visible;padding-left: 2em;padding-right: 2em;font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;font-size: 14px;line-height: 1.35;}table {margin: 1em auto;border-width: 1px;border-color: #DDDDDD;border-style: outset;border-collapse: collapse;}table th {border-width: 2px;padding: 5px;border-style: inset;}table td {border-width: 1px;border-style: inset;line-height: 18px;padding: 5px 5px;}table, table th, table td {border-left-style: none;border-right-style: none;}table thead, table tr.even {background-color: #f7f7f7;}p {margin: 0.5em 0;}blockquote {background-color: #f6f6f6;padding: 0.25em 0.75em;}hr {border-style: solid;border: none;border-top: 1px solid #777;margin: 28px 0;}dl {margin-left: 0;}dl dd {margin-bottom: 13px;margin-left: 13px;}dl dt {font-weight: bold;}ul {margin-top: 0;}ul li {list-style: circle outside;}ul ul {margin-bottom: 0;}pre, code {background-color: #f7f7f7;border-radius: 3px;color: #333;white-space: pre-wrap; }pre {border-radius: 3px;margin: 5px 0px 10px 0px;padding: 10px;}pre:not([class]) {background-color: #f7f7f7;}code {font-family: Consolas, Monaco, 'Courier New', monospace;font-size: 85%;}p > code, li > code {padding: 2px 0px;}div.figure {text-align: center;}img {background-color: #FFFFFF;padding: 2px;border: 1px solid #DDDDDD;border-radius: 3px;border: 1px solid #CCCCCC;margin: 0 5px;}h1 {margin-top: 0;font-size: 35px;line-height: 40px;}h2 {border-bottom: 4px solid #f7f7f7;padding-top: 10px;padding-bottom: 2px;font-size: 145%;}h3 {border-bottom: 2px solid #f7f7f7;padding-top: 10px;font-size: 120%;}h4 {border-bottom: 1px solid #f7f7f7;margin-left: 8px;font-size: 105%;}h5, h6 {border-bottom: 1px solid #ccc;font-size: 105%;}a {color: #0033dd;text-decoration: none;}a:hover {color: #6666ff; }a:visited {color: #800080; }a:visited:hover {color: #BB00BB; }a[href^="http:"] {text-decoration: underline; }a[href^="https:"] {text-decoration: underline; }</style>
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">_server.yml for framework developers</h1>
+
+</header>
+
+
+<p>What good is a server framework if it cannot be easily deployed? After all, surely you hope that your users won’t run the amazing servers they’ve created with your tool on the machines they developed them on?</p>
+<p>Ignoring the complications around getting all the files, secrets, environment variables and libraries transferred to the machine that will eventually run the server, one big question remains: How does the machine know how to launch the server? How does it even know that the files constitute a server implementation?</p>
+<p>The R language has had comparably fewer server frameworks than other languages for various reasons but this is slowly changing. This low number has meant that it has generally been a viable strategy to let the server just “know about” the various options rather than try to gather around a common standard for describing these things. But, the time is ripe and due to the lack of any standard at all, we won’t fall into the trap of <a href="https://xkcd.com/927/">yet another standard</a> when we now propose just that: the _server.yml standard for describing R servers.</p>
+<h2 id="the-standard">The standard</h2>
+<p>Recognizing that it is practically impossible to define a comprehensive standard that covers all possible settings for all current and future server frameworks in R, we propose a very “thin” standard that put the onus on the server frameworks themselves to give it meaningful structure.</p>
+<h3 id="the-_server.yml-file">The _server.yml file</h3>
+<p>The core of the standard is the <code>_server.yml</code> file. This file should be placed at the root of your server specification and will (unsurprisingly) contain a YAML formatted definition of your server setup. The only required field is <code>engine</code> which should appear as the first line. This element names the package responsible for launching the server and should be installable by the server. A <code>_server.yml</code> file for a plumber2 api will have:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">engine</span><span class="kw">:</span><span class="at"> plumber2</span></span></code></pre></div>
+<p>as the first line.</p>
+<p>The file can (and probably should) have additional fields, but it is up to the package named in <code>engine</code> to interpret these and the standard does not name <em>any</em> additional requirements to the file.</p>
+<h3 id="the-engine">The engine</h3>
+<p>For a package to be a valid engine in a <code>_server.yml</code> file it must adhere to this one requirement: It should have a function, <code>launch_server(settings, host = NULL, port = NULL, ...)</code>, that takes the path to a <code>_server.yml</code> file as the first argument, the ip address to launch the server on as the second, and the port to serve it on as the third. The function needs not be exported. The <code>launch_server()</code> function is responsible for making sense of the provided <code>_server.yml</code> file and error if it is malformed according to the expectations the engine sets. The function should launch a server in a blocking fashion, i.e. it should not return control to R for as long as the server runs.</p>
+<h3 id="the-server">The server</h3>
+<p>For a server to support serving <code>_server.yml</code>-defined R servers, it should check for the existence of such a file at the root of the deployment. It should then read the engine field and install the named package. After that it should use the <code>launch_server()</code> function to launch the server. A simple example of this logic is provided below with no error handling or anything.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exist</span>(<span class="st">&quot;_server.yml&quot;</span>)) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Figure out the engine for the server</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># You could probably easily do this without the yaml package</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  engine <span class="ot">&lt;-</span> yaml<span class="sc">::</span><span class="fu">read_yaml</span>(<span class="st">&quot;_server.yml&quot;</span>)<span class="sc">$</span>engine</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Install the engine if not already available</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(engine, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(engine)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Find the launch_server() function in the engine</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  launch_server <span class="ot">&lt;-</span> <span class="fu">get</span>(</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;launch_server&quot;</span>, </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">envir =</span> <span class="fu">asNamespace</span>(engine), </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">mode =</span> <span class="st">&quot;function&quot;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Use the function to launch the server</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">launch_server</span>(</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">settings =</span> <span class="st">&quot;_server.yml&quot;</span>, </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">host =</span> HOST_ADDR, <span class="co"># Variable holding the ip address</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">port =</span> PORT_NO    <span class="co"># Variable holding the port number</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Logic for other types of server specifications</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<h2 id="recommendations-for-_server.yml-engines">Recommendations for _server.yml engines</h2>
+<p>While the content besides the <code>engine</code> field is completely at the discretion of the engine developer the following are some recommendations:</p>
+<h3 id="file-paths">File paths</h3>
+<p>It is likely that you’d want your <code>_server.yml</code> file to point to one or more files. Make sure that all file and folder paths are interpreted as relative to the location of the <code>_server.yml</code> path rather than to the working directory of the R session.</p>
+<h3 id="options">Options</h3>
+<p>You should aim for a separation of server logic (usually one or more R files), and server settings. To that end, you should provide a way for the user to record settings in the <code>_server.yml</code> file so that they do not need to modify implementation files in order to change run time behavior.</p>
+<h2 id="case-study-plumber2">Case study: plumber2</h2>
+<p>plumber2 adheres to the <code>_server.yml</code> standard and in the following we will go through how it does so as an example for other engine developers who wish to support it.</p>
+<h3 id="yaml-content">YAML content</h3>
+<p>plumber2 currently defines 3 fields besides the <code>engine</code> field:</p>
+<ul>
+<li><code>routes</code>: An array of R files or folders that contain the server logic as annotated functions and objects.</li>
+<li><code>constructor</code>: A path to a single R file that constructs the Plumber2 object.</li>
+<li><code>options</code>: A list of options to use for the server. These all corresponds to options that can be seen in <code>?plumber2::all_opts()</code>.</li>
+</ul>
+<p>plumber2 provide a function (<code>create_server_yml()</code>) that creates this file for you so that the user can be confident that it is formatted correctly. This is generally a good idea and also provides a place to document the content of the file.</p>
+<h3 id="launch_server"><code>launch_server()</code></h3>
+<p>The <code>launch_server()</code> function is quite simple for plumber2 since the <code>api()</code> constructor itself understands <code>_server.yml</code> files as input. Because of this the function looks like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>plumber2<span class="sc">:::</span>launch_server</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; function (settings, host = NULL, port = NULL, ...) 
+#&gt; {
+#&gt;     pa &lt;- api(settings)
+#&gt;     if (!is.null(host)) {
+#&gt;         pa$host &lt;- host
+#&gt;     }
+#&gt;     if (!is.null(port)) {
+#&gt;         pa$port &lt;- port
+#&gt;     }
+#&gt;     api_run(pa)
+#&gt; }
+#&gt; &lt;bytecode: 0x14ca4c838&gt;
+#&gt; &lt;environment: namespace:plumber2&gt;</code></pre>
+</div>
+</div>
+<h2 id="supported-frameworks">Supported frameworks</h2>
+<p>Below is a list with R webserver frameworks known to support the <code>_server.yml</code> standard. If you have developed a framework with support and wish for it to appear here, please create a pull request with the addition:</p>
+<ul>
+<li><a href="https://plumber2.posit.co">plumber2</a></li>
+<li><a href="https://fiery.data-imaginist.com">fiery</a></li>
+</ul>
+
+
+
+
+
+</body></html>

@@ -36,6 +36,7 @@ readLines <- function(x) base::readLines(file.path(me, x))
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 pa <- api(file.path(me, "files/apis/03-03-search.R"))
 
@@ -53,6 +54,7 @@ code_chunk(res$body, "json")
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 pa <- api(file.path(me, "files/apis/03-04-body.R"))
 
@@ -75,6 +77,7 @@ code_chunk(res$body, "json")
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 pa <- api(file.path(me, "files/apis/03-05-headers.R"))
 
@@ -95,6 +98,7 @@ code_chunk(res$body, "json")
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 pa <- api(file.path(me, "files/apis/03-02-types.R"))
 

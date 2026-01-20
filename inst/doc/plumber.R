@@ -24,6 +24,7 @@ readLines <- function(x) base::readLines(file.path(me, x))
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 pa <- api(file.path(me, "files/apis/01-01-quickstart.R"))
 
@@ -35,6 +36,7 @@ code_chunk(res$body, "json")
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 if (packageVersion("base") < "4.5.0") {
   cat("| The `plot/` endpoint requires the penguins dataset first introduced in R 4.5.0")
@@ -49,6 +51,7 @@ if (packageVersion("base") < "4.5.0") {
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 if (packageVersion("base") < "4.5.0") {
   cat("| The `plot/` endpoint requires the penguins dataset first introduced in R 4.5.0")
@@ -68,6 +71,7 @@ if (packageVersion("base") < "4.5.0") {
 
 ## -----------------------------------------------------------------------------
 #| echo: false
+#| message: false
 #| results: asis
 pa <- api(file.path(me, "files/apis/01-02-html.R"))
 

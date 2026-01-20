@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Extending plumber2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+width: 0.8em;
+margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+}
+pre.numberSource { margin-left: 3em; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+
+
+<style type="text/css">body {background-color: #fff;margin: 1em auto;max-width: 700px;overflow: visible;padding-left: 2em;padding-right: 2em;font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;font-size: 14px;line-height: 1.35;}table {margin: 1em auto;border-width: 1px;border-color: #DDDDDD;border-style: outset;border-collapse: collapse;}table th {border-width: 2px;padding: 5px;border-style: inset;}table td {border-width: 1px;border-style: inset;line-height: 18px;padding: 5px 5px;}table, table th, table td {border-left-style: none;border-right-style: none;}table thead, table tr.even {background-color: #f7f7f7;}p {margin: 0.5em 0;}blockquote {background-color: #f6f6f6;padding: 0.25em 0.75em;}hr {border-style: solid;border: none;border-top: 1px solid #777;margin: 28px 0;}dl {margin-left: 0;}dl dd {margin-bottom: 13px;margin-left: 13px;}dl dt {font-weight: bold;}ul {margin-top: 0;}ul li {list-style: circle outside;}ul ul {margin-bottom: 0;}pre, code {background-color: #f7f7f7;border-radius: 3px;color: #333;white-space: pre-wrap; }pre {border-radius: 3px;margin: 5px 0px 10px 0px;padding: 10px;}pre:not([class]) {background-color: #f7f7f7;}code {font-family: Consolas, Monaco, 'Courier New', monospace;font-size: 85%;}p > code, li > code {padding: 2px 0px;}div.figure {text-align: center;}img {background-color: #FFFFFF;padding: 2px;border: 1px solid #DDDDDD;border-radius: 3px;border: 1px solid #CCCCCC;margin: 0 5px;}h1 {margin-top: 0;font-size: 35px;line-height: 40px;}h2 {border-bottom: 4px solid #f7f7f7;padding-top: 10px;padding-bottom: 2px;font-size: 145%;}h3 {border-bottom: 2px solid #f7f7f7;padding-top: 10px;font-size: 120%;}h4 {border-bottom: 1px solid #f7f7f7;margin-left: 8px;font-size: 105%;}h5, h6 {border-bottom: 1px solid #ccc;font-size: 105%;}a {color: #0033dd;text-decoration: none;}a:hover {color: #6666ff; }a:visited {color: #800080; }a:visited:hover {color: #BB00BB; }a[href^="http:"] {text-decoration: underline; }a[href^="https:"] {text-decoration: underline; }</style>
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Extending plumber2</h1>
+
+</header>
+
+
+<p>plumber2 was from the inception built as a modular system meant for extension. In this article we’ll go over the process of creating a plumber2 extension as well as talk a bit about the architecture of plumber2 and how it relates to extending it.</p>
+<h3 id="what-does-it-mean-to-extend-plumber2">What does it mean to extend plumber2</h3>
+<p>Before we continue we should qualify what we mean by extending plumber2. It of course involves adding new functionality to plumber2 in some way, but more specifically it entails adding functionality in such a way that it <em>feels</em> native to plumber2. Consider this function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>say_hi <span class="ot">&lt;-</span> <span class="cf">function</span>(language, api) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  hi <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;english&quot;</span> <span class="ot">=</span> <span class="st">&quot;hi&quot;</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;danish&quot;</span> <span class="ot">=</span> <span class="st">&quot;hej&quot;</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;french&quot;</span> <span class="ot">=</span> <span class="st">&quot;salut&quot;</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;spanish&quot;</span> <span class="ot">=</span> <span class="st">&quot;hola&quot;</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;japanese&quot;</span> <span class="ot">=</span> <span class="st">&quot;konnichiwa&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  )[<span class="fu">tolower</span>(language)]</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  api<span class="sc">$</span><span class="fu">on</span>(<span class="st">&quot;start&quot;</span>, <span class="cf">function</span>(...) <span class="fu">cat</span>(hi, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>} </span></code></pre></div>
+</div>
+<p>While the above does extend plumber2’ API, it does so in a very non-native way. First, the function name is not prefixed with <code>api_</code>, and second, the function is not pipe-friendly. However, most importantly for a plumber2 function it does not have an associated tag that can be used to add this functionality in annotation. While certain functionality isn’t accessible through tags, you should try your hardest to allow it as this is how most users will create APIs.</p>
+<p>There is another type of extension that we will discuss in the end as well, which is to add new parsers, serializers, or async engines. All of these revolves around registering new functions that can then be accessed with the relevant tags.</p>
+<h2 id="adding-new-tags">Adding new tags</h2>
+<p>Central to plumber2’ api is the annotation tags. Thankfully, tags are not exclusive to the functionality provided in the plumber2 package but can be provided by other packages that somehow extends what plumber2 can do.</p>
+<p>Adding a new tags is relatively simple but it does require a bit of knowledge about how plumber2 parses a file. For a single annotation block, the process is roughly like this:</p>
+<ol type="1">
+<li>The annotation is parsed and split into it’s constituents. Each tag will at this point be made up of the tag name and an optional text string that contains anything that followed the tag. At this point, the expression that follows the annotation block will also be parsed and evaluated.</li>
+<li>plumber2 will determine which, if any, of the basic block types this is, e.g. a handler block, a shiny block, or something else</li>
+<li>If plumber2 recognizes the block type it will create an S3 object with a name following the <code>plumber2_*_block</code> class name structure. The object will contain all information necessary to apply the annotation to a Plumber2 object.</li>
+<li>After this, plumber2 will go over all tags in the block and see if one or more handlers have been registered for the tag and call the handlers one by one. The handlers have the option to modify the block object, either by adding to or modifying its elements (it is not allowed to delete them). Further, it may choose to subclass the object (but not remove a class).</li>
+<li>Once the annotation file has been converted into a list of objects they are one by one applied to the Plumber2 object by calling the <code>apply_plumber2_block()</code> generic on the block and passing in the block object created in 3 and 4 along with the Plumber2 object.</li>
+</ol>
+<p>It follows from the above that there are two places you should be concerned about when it comes to extending plumber2 tags: <em>tag registration</em> and <em>apply_plumber2_block</em> methods. Depending on your need you’ll have to add one of them or potentially both. We’ll go through both below:</p>
+<h3 id="tag-registration">Tag registration</h3>
+<p>When adding a new tag, or, if you want to add functionality to an already existing tag, you’ll have to add a new handler to the tag. This is done with the <code>add_plumber2_tag()</code> function which takes the tag name and a handler function. In general, you <em>can</em> add a handler to an already existing tag (a tag can have multiple handlers and they will each be called in turn), but you should exert caution when doing this to not mess with the original behavior of the tag. Because adding a handler for a new tag that you control, this is what we will focus on.</p>
+<p>An additional aspect to think about is whether the tag is meant to fit into an already existing block type (e.g. a standard handler block) or be the basis of a new block type. Below we will show both.</p>
+<h4 id="new-block-type">New block type</h4>
+<p>In this example we want to create a new type of annotation block that sets up a simple recurring message from the server. We will call the tag <code>tictoc</code> and allow it to take a single additional parameter which is the interval in seconds between the message. Further, we will allow the user to add the actual message as a string after the annotation block.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">add_plumber2_tag</span>(<span class="st">&quot;tictoc&quot;</span>, <span class="cf">function</span>(block, call, tags, values, env) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">inherits</span>(block, <span class="st">&quot;plumber2_empty_block&quot;</span>)) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    cli<span class="sc">::</span><span class="fu">cli_abort</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;{.field @tictoc} cannot be used with other types of annotation blocks&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span>rlang<span class="sc">::</span><span class="fu">is_string</span>(call)) {</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    cli<span class="sc">::</span><span class="fu">cli_abort</span>(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;The expression following a {.field tictoc} block must be a string&quot;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  interval <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(values[[<span class="fu">which</span>(tags <span class="sc">==</span> <span class="st">&quot;tictoc&quot;</span>)[<span class="dv">1</span>]]])</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.na</span>(interval)) interval <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  message <span class="ot">&lt;-</span> call</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  type <span class="ot">&lt;-</span> <span class="st">&quot;message&quot;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">any</span>(tags <span class="sc">==</span> <span class="st">&quot;logType&quot;</span>) <span class="sc">&amp;&amp;</span> values[[<span class="fu">which</span>(tags <span class="sc">==</span> <span class="st">&quot;logType&quot;</span>)[<span class="dv">1</span>]]] <span class="sc">!=</span> <span class="st">&quot;&quot;</span>) {</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    type <span class="ot">&lt;-</span> values[[<span class="fu">which</span>(tags <span class="sc">==</span> <span class="st">&quot;logType&quot;</span>)[<span class="dv">1</span>]]]</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">structure</span>(</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">interval =</span> interval,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">message =</span> message,</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">type =</span> type</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">class =</span> <span class="st">&quot;plumber2_tictoc_block&quot;</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="fu">add_plumber2_tag</span>(<span class="st">&quot;logType&quot;</span>)</span></code></pre></div>
+</div>
+<p>Above we define two new tags, <code>tictoc</code> and <code>logType</code>. Only <code>tictoc</code> has an associated handler and that handler uses both tags. The <code>logType</code> tag is still registered but only to ensure that plumber2/roxygen2 knows of its existence.</p>
+<p>In the handler function above we can see the two different modes of input for an annotation block: the <code>tags</code>/<code>values</code> arguments and the <code>call</code> argument. <code>tags</code> contains a character vector with all the tags in the block, and <code>values</code> is a list of all the additional arguments supplied to the tag. The values are provided as single, unprocessed, strings which means that if a tag does not have additional arguments then values will be an empty string. Further, the string may contain one or more new-line characters in the end etc. It is up to the provider of the tag (you) to make sense of any argument the tag takes by parsing the associated value however you chose. The <code>call</code> argument contains whatever comes after the annotation block, parsed and evaluated.</p>
+<p>In the handler above we first check to see if <code>block</code> is a <code>plumber2_empty_block</code> object. This is not strictly necessary but if we are implementing a new block type we should check that it is not being mixed with other block types. Apart from this, the handler is mainly parsing the relevant tags and collecting them in a new object that it gives the class <code>plumber2_tictoc_block</code>.</p>
+<h4 id="existing-block-type">Existing block type</h4>
+<p>You may want to augment an already existing block type with a new tag. The process of doing so is similar to the above, but there are other considerations to take into account for the handler function. As an example we will look at the <code>@cors</code> tag which is implemented as an extension inside plumber2 itself:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">add_plumber2_tag</span>(<span class="st">&quot;cors&quot;</span>, <span class="cf">function</span>(block, call, tags, values, env) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">class</span>(block) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;plumber2_cors_block&quot;</span>, <span class="fu">class</span>(block))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  block<span class="sc">$</span>cors <span class="ot">&lt;-</span> <span class="fu">trimws</span>(<span class="fu">strsplit</span>(values[[<span class="fu">which</span>(tags <span class="sc">==</span> <span class="st">&quot;cors&quot;</span>)[<span class="dv">1</span>]]], <span class="st">&quot;,&quot;</span>)[[<span class="dv">1</span>]])</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (block<span class="sc">$</span>cors <span class="sc">==</span> <span class="st">&quot;&quot;</span>) {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    block<span class="sc">$</span>cors <span class="ot">&lt;-</span> <span class="st">&quot;*&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  block</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+</div>
+<p>In the handler above, because we are adding to an existing block type, we do not create a new block object but rather modifies the one passed in. In this case we add a new class to it (not replace it, which is disallowed), and add a new element to it as well. We could check the block class in case we had an exact requirement on which block type to use it with, but since <code>@cors</code> can be used together with any block type that defines an endpoint we don’t bother here.</p>
+<h3 id="apply_plumber2_block-methods"><code>apply_plumber2_block</code> methods</h3>
+<p>Both examples above doesn’t really do anything to the Plumber2 object, rather, they gather information from the annotations for later use. This “later use” comes in the form of <code>apply_plumber2_block</code> methods for the block object classes created (in the examples above, <code>plumber2_tictoc_block</code> and <code>plumber2_cors_block</code>). The method must take the following arguments:</p>
+<ul>
+<li><code>block</code>, which is the object we constructed above during tag parsing</li>
+<li><code>api</code>, which is the Plumber2 object being constructed</li>
+<li><code>route_name</code>, which is the name of the route being created in the given file</li>
+<li><code>root</code>, which is the root of the all endpoints in the file</li>
+<li><code>...</code>, which is currently always ignored but should be there for future use</li>
+</ul>
+<p>Of these, <code>block</code> and <code>api</code> are always relevant whereas the others can be ignored unless you add endpoints or in some other way interact with the route that the annotation file defines. As above there are a few different things to keep in mind depending on whether you subclass an existing block or not.</p>
+<h4 id="single-main-class">Single main class</h4>
+<p>For an example of a method for a block object with only a single class we return to our tictoc block above. The <code>apply_plumber2_block()</code> method could look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>apply_plumber2_block.plumber2_tictoc_block <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  block, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  api, </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  route_name, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  root, </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>) {</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  api<span class="sc">$</span><span class="fu">time</span>(</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    api<span class="sc">$</span><span class="fu">log</span>(<span class="at">event =</span> block<span class="sc">$</span>type, <span class="at">message =</span> block<span class="sc">$</span>message),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">after =</span> block<span class="sc">$</span>interval,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">loop =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  api</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p>As you can see, there is little magic in what goes on in the <code>apply_plumber2_block</code> method. You take the information gathered from the tags and do whatever you need to do to the Plumber2 object to put it into effect. Here we use the <code>time()</code> method from the Plumber2 object to add a recurring timed logging expression.</p>
+<p>The method above returns the Plumber2 object. This is strictly not necessary due to the reference semantics of the object but it is good to do for clarity. Especially given that <em>if</em> a Plumber2 object is returned, even a different one than passed in, it will take over from the original object. It is of course important that you don’t pull the carpet from under the feet of the user and do something completely unpredictable. However, it does mean that you can cast the Plumber2 object to a subclass, should your extension require that.</p>
+<h4 id="subclass">Subclass</h4>
+<p>For an example of an <code>apply_plumber2_block()</code> method for a block object that has been subclassed, we look again at how the <code>@cors</code> tag has been implemented:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>apply_plumber2_block.plumber2_cors_block <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  block,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  api,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  route_name,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  root,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>) {</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">NextMethod</span>()</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(block<span class="sc">$</span>endpoints)) {</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (path <span class="cf">in</span> block<span class="sc">$</span>endpoints[[i]]<span class="sc">$</span>path) {</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>      api <span class="ot">&lt;-</span> <span class="fu">api_security_cors</span>(</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        api,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">paste0</span>(root, path),</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        block<span class="sc">$</span>cors,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">methods =</span> block<span class="sc">$</span>endpoints[[i]]<span class="sc">$</span>method</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  api</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p>The most important takeaway from the above is that it starts off by calling <code>NextMethod()</code> thus ensuring that the parent methods have been called first. Another thing to note is that the method is using the programmatic api under the hood to support the annotation functionality (the use of <code>api_security_cors()</code>). This is a good design that ensures the annotation and programmatic interface stays aligned. We didn’t do it for the <code>tictoc</code> tag above because we had not yet created a programmatic interface but we will get to that in a second.</p>
+<h2 id="adding-a-programmatic-interface">Adding a programmatic interface</h2>
+<p>While the annotations are what makes plumber2 stand out, you should ensure that whatever functionality your extension provides should also be available to users who build their api programmatically. There does not need to be a one-to-one correspondence between annotations and functions but keep it as closely aligned as possible. To ensure the programmatic interface feels native you need to make it pipe-friendly, meaning that it should take a Plumber2 object as the first argument (generally named <code>api</code>) and return it back modified in the end. Apart from this the only other ask is that you prefix the function name with <code>api_</code> to align it with the rest of the interface. For the <code>tictoc</code> example we created above it would look something like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>api_tictoc <span class="ot">&lt;-</span> <span class="cf">function</span>(api, interval, message, <span class="at">type =</span> <span class="st">&quot;message&quot;</span>) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  api<span class="sc">$</span><span class="fu">time</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    api<span class="sc">$</span><span class="fu">log</span>(<span class="at">event =</span> type, <span class="at">message =</span> message),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">after =</span> interval,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">loop =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  api</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<h2 id="new-parsers-serializers-and-async-engines">New parsers, serializers, and async engines</h2>
+<p>A simple way to expand on what plumber2 can do is to provide new parsers and serializers for it, or even a new async backend (though the one provided is for all intend and purposes the best choice). We will go through how to approach all of these below</p>
+<h3 id="serializers">Serializers</h3>
+<p>Serializers are responsible for converting the return value of your functions into the format requested by the client. plumber2 supports content negotiation so that the client can ask for a specific format (or a priority of different formats) and plumber2 will serve it to the best of its abilities. If you do not provide any additional details about which serializers to support, plumber2 will use a set of default serializers to cover the most common use cases:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">get_serializers</span>())</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] &quot;application/json&quot;          &quot;text/html&quot;                
+#&gt; [3] &quot;application/rds&quot;           &quot;text/csv&quot;                 
+#&gt; [5] &quot;text/tab-separated-values&quot; &quot;text/xml&quot;                 
+#&gt; [7] &quot;text/plain&quot;                &quot;text/yaml&quot;</code></pre>
+</div>
+</div>
+<p>There are serializers besides the defaults that are registered, usually for niche situations. These can be accessed by name, either in annotation or in the programmatic interface:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_serializers</span>(<span class="st">&quot;geojson&quot;</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; $`application/geo+json`
+#&gt; function (x) 
+#&gt; {
+#&gt;     if (inherits(x, &quot;sfc&quot;)) {
+#&gt;         return(geojsonsf::sfc_geojson(x, ...))
+#&gt;     }
+#&gt;     if (inherits(x, &quot;sf&quot;)) {
+#&gt;         return(geojsonsf::sf_geojson(x, ...))
+#&gt;     }
+#&gt;     cli::cli_abort(&quot;{.fun format_geojson} did not receive an `sf` or `sfc` object.&quot;)
+#&gt; }
+#&gt; &lt;bytecode: 0x1064e92b0&gt;
+#&gt; &lt;environment: 0x12511bc88&gt;</code></pre>
+</div>
+</div>
+<p>While you can always pass in a function directly as a serializer, registering them by name makes it much easier to reuse, and making it a default makes the serializer instantly available to all endpoints (providing they are using the defaults). It follows that providing additional serializers, both defaults and non-defaults, increases ways plumber2 can interact with the client.</p>
+<p>Creating and registering a new serializer is not involved and we will go through the process below by creating a toml serializer based on the <a href="https://extendr.rs/tomledit/">tomledit</a> package.</p>
+<p>The first thing to do is to create the serializer function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>format_toml <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  rlang<span class="sc">::</span><span class="fu">check_installed</span>(<span class="st">&quot;tomledit&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) {</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    tomledit<span class="sc">::</span><span class="fu">to_toml</span>(x)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p>As we can see, we create a function that returns the actual serializer (which is a unary function taking the data to serialize). We do this for two reasons: First, it allows us to run one-time code only once and not every time something needs to be serialized and (not shown here), it allows us to pass in arguments that modify the behavior of the serializer, e.g. like for the rds serializer:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(format_rds)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; function (version = &quot;3&quot;, ascii = FALSE, ...) 
+#&gt; {
+#&gt;     function(x) {
+#&gt;         serialize(x, NULL, ascii = ascii, version = version, 
+#&gt;             ...)
+#&gt;     }
+#&gt; }
+#&gt; &lt;bytecode: 0x1064b5470&gt;
+#&gt; &lt;environment: namespace:plumber2&gt;</code></pre>
+</div>
+</div>
+<p>With our serializer in hand we can now proceed to registering it. For that we need a name, the serializer itself, as well as the mime type of the output it produces. The default is to register a serializer as default and since this makes sense here we do that. The latter can sometimes be a bit of a guessing game since mime types are an evolving thing, especially for new formats. If one has been registered with <a href="https://www.iana.org/assignments/media-types/media-types.xhtml">IANA</a> you should use that, but otherwise try to see what the developer of the format or the community around it suggests. For toml, the <code>application/toml</code> mime type has been registered at IANA so we’ll use that.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">register_serializer</span>(<span class="st">&quot;toml&quot;</span>, format_toml, <span class="st">&quot;application/toml&quot;</span>)</span></code></pre></div>
+</div>
+<p>We can convince ourself that it works by trying to fetch it by name:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_serializers</span>(<span class="st">&quot;toml&quot;</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; $`application/toml`
+#&gt; function (x) 
+#&gt; {
+#&gt;     tomledit::to_toml(x)
+#&gt; }
+#&gt; &lt;environment: 0x1074ee580&gt;</code></pre>
+</div>
+</div>
+<p>We can also see that it is part of the defaults:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">get_serializers</span>())</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] &quot;application/json&quot;          &quot;text/html&quot;                
+#&gt; [3] &quot;application/rds&quot;           &quot;text/csv&quot;                 
+#&gt; [5] &quot;text/tab-separated-values&quot; &quot;text/xml&quot;                 
+#&gt; [7] &quot;text/plain&quot;                &quot;text/yaml&quot;                
+#&gt; [9] &quot;application/toml&quot;</code></pre>
+</div>
+</div>
+<h4 id="graphics-output">Graphics output</h4>
+<p>There is a special category of output that requires their own breed of serializers, namely graphics output. These produces image files through the side-effect of rendering and the serializer needs to know to capture that. Graphics serializers are not part of the default serializers and you have to specifically request them.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">get_serializers</span>(<span class="fu">c</span>(<span class="st">&quot;png&quot;</span>, <span class="st">&quot;...&quot;</span>)))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] &quot;image/png&quot;       &quot;image/jpeg&quot;      &quot;image/tiff&quot;      &quot;image/svg+xml&quot;  
+#&gt; [5] &quot;image/bmp&quot;       &quot;application/pdf&quot;</code></pre>
+</div>
+</div>
+<p>In the above I request the graphics serializer “png” explicitly and then use the <code>...</code> to ask for the remainder of the same type.</p>
+<p>Since the act of capturing graphics output has been formalized in R through the graphics device interface it is relatively straightforward to add a new graphics serializer using a helper function from plumber2. Below we create a PostScript serializer based on the <code>postscript()</code> device:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>format_postscript <span class="ot">&lt;-</span> <span class="fu">device_formatter</span>(postscript)</span></code></pre></div>
+</div>
+<p>This can now be registered in the same way as the toml serializer above. plumber2 can see that the serializer is a graphics serializer, so there is no special thing you need to do differently.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">register_serializer</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;postscript&quot;</span>, </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  format_postscript, </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;application/postscript&quot;</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">default =</span> <span class="cn">FALSE</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<h3 id="parsers">Parsers</h3>
+<p>Parsers are like serializers but for the other direction of communication, that is, for converting the body of a request into an R object. The process is very similar as the above and we will showcase it by creating a toml parser as well.</p>
+<p>Like with serializers there is also a concept of default parsers, and there is the <code>get_parsers()</code> function to retrieve parsers from the registry.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>parse_toml <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  rlang<span class="sc">::</span><span class="fu">check_installed</span>(<span class="st">&quot;tomledit&quot;</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x, directives) {</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    tomledit<span class="sc">::</span><span class="fu">read_toml</span>(<span class="fu">rawToChar</span>(x))</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p>This looks a lot like our toml serializer. It is a function returning a function and we use the outer function for time-consuming one-off code to ensure the inner function is as lean as possible. One difference is that the inner function takes two arguments: <code>x</code> (the body of the request as a raw vector), and <code>directives</code>. The last argument is for additional parameters passed from the client as part of the <code>Content-Type</code> header. You can often ignore this last argument but for some parsers it is important.</p>
+<p>Registering the parser is done like the serializer. The only difference is that you can register a parser to multiple mime types rather than a single one, so that it can respond to all of them no matter what the client decides to call it. In general it is a good idea to include any kind of mime type, official and otherwise, you can find since you are not in control of what the client decides to use.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">register_parser</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;toml&quot;</span>, </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  parse_toml, </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;application/toml&quot;</span>, <span class="st">&quot;text/x-toml&quot;</span>, <span class="st">&quot;text/toml&quot;</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<h3 id="asynchronous-engines">Asynchronous engines</h3>
+<p>plumber2 comes with build in support for asynchronous evaluation based on mirai. We strongly believe this is the best choice for async eval in R, but you may still use another engine if you se desire by registering a new one. Below, we show how to create an async evaluator based on the <code>future</code> package</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>future_async <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  rlang<span class="sc">::</span><span class="fu">check_installed</span>(<span class="st">&quot;promises&quot;</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(expr, envir) {</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    promises<span class="sc">::</span><span class="fu">future_promise</span>(</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">expr =</span> expr,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">envir =</span> envir,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">substitute =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>      ...</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p>As with parsers and serializers we start be creating an evaluator function which, again, is a function returning a function. The inner function takes two arguments: an expression to evaluate, and an environment that holds all the variables to use in the expression. The inner function must return a promise (based on the <a href="https://rstudio.github.io/promises/">promises</a> package).</p>
+<p>Once the evaluator is in place it can be registered to a name:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">register_async</span>(<span class="st">&quot;future&quot;</span>, future_async, <span class="fu">c</span>(<span class="st">&quot;promises&quot;</span>, <span class="st">&quot;future&quot;</span>))</span></code></pre></div>
+</div>
+<p>The last argument holds the package dependencies for the engine.</p>
+<p>You can now use this engine, either with annotation (<code>@async future</code>) or programmatically with <code>get_async(&quot;future&quot;)</code>.</p>
+<h2 id="the-plumber2-object-and-its-extension-points">The Plumber2 object and its extension points</h2>
+<p>TBD</p>
+
+
+
+
+
+</body></html>
